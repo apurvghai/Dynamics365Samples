@@ -1,0 +1,55 @@
+﻿.internal-link.view-post
+{
+   font-family:"Segoe UI";font-size:12pt;
+}
+.post-application {display:none;}
+.abbreviated-post .post-content h3, .full-post .post-content h3
+{
+  font-size:9pt;
+}
+.content-fragment.blog-post .full-post .post-name
+{
+   font-size:14px;color:#000;border-bottom-width:1px;border-bottom-style:dashed; padding-bottom:2px;
+}
+.functionName {  color:#0000FF; }
+
+.greenCode
+{
+ color:#008000;
+}
+.sourceCode
+{
+  font-family:"Courier New";
+  font-size:10pt;
+  border:1px dotted;
+  line-height:1.2;
+}
+.sourceJs
+{
+ font-family:"Courier New";
+  font-size:9pt;
+  color:#00009B;
+  border:1px dotted;
+  background:#E3F2FF;
+}
+.className
+{
+  color:#2C92AF;
+}
+body
+{
+ font-family:"Segoe UI";
+ font-size:10pt;
+}
+.stringData
+{
+  color:rgb(163,21,21); 
+}
+.blogSite
+{
+  width:605px;
+}
+h3
+{
+    font-size:13px;
+}

@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="StyleSheet1.css" />
+</head>
+<body class="blogSite">
+
+    <p>
+        Hey guys,<br /><br />
+        Today I'm going to talk about an interesting sample on Windows store apps which will go connect with CRM using Oauth.
+
+    </p>
+    <h3>
+        Register your application with ADFS Environment for development / Token issue
+    </h3>
+
+    <ol>
+        <li>	Create a GUID using Guid Generator using Visual Studio</li>
+        <li>
+            Make a note of it for registration
+        </li>
+        <li>At this point, I've not provided  Redirect Url</li>
+    </ol>
+    <p>
+        <h3>Adfs script:</h3>
+        <span class="sourceJs">
+            Add-AdfsClient -ClientId C8E3F34A-E1A6-455C-A6DB-A1B82E6A6BE0 -Name WindowsAppsStore -Description "OAuth for CRM connecting Clients from Windows Store"
+        </span>
+
+    </p>
+
+    <h3>
+        Windows Store Application demo
+    </h3>
+    <p>
+
+        Note: This app is using <a href="https://code.msdn.microsoft.com/windowsapps/Mobile-Development-Helper-3213e2e6" target="_blank">Mobile SDK</a> Please read the instructions to compile and generate the Assembly for app reference
+    </p>
+    <ol>
+        <li>	Create a new project using Visual Studio 2013</li>
+        <li>
+            Choose, Project for Store (Blank should be okay)
+        </li>
+        <li>
+            Add Reference to "Microsoft.Crm.Sdk.Mobile"
+        </li>
+        <li>
+            Add CrmHelper.cs file form the Mobile SDK Download to reuse the code.
+        </li>
+        <li>	I have written and attached below</li>
+    </ol>
+    <p>
+        <h3>Sample:</h3>
+        <img src="http://blogs.msdn.com/cfs-file.ashx/__key/communityserver-blogs-components-weblogfiles/00-00-01-45-90-windowstoreapps/6116.Sample-Code.png" border="0" />
+    </p>
+
+    <p>
+        <i>It's important that you run the code for the first time with all the correct parameters/variables set and obtain the redirect URL from below code:</i> <br />
+        <span class="sourceJs">
+            public static string redirectUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().ToString();
+        </span><br />
+    </p>
+    <p>
+        Once you've see the value, it will look something like this <br />
+        <span class="sourceJs">
+            ms-app://s-1-15-2-23142
+        </span> <br />
+
+        Now go back to ADFS and use the below command: <br /><br />
+        <span class="sourceJs">
+            Set-AdfsClient -ClientId C8E3F34A-E1A6-455C-A6DB-A1B82E6A6BE0 -Name WindowsAppsStore -Description "OAuth for CRM connecting Clients from Windows Store" -RedirectUri ms-app://s-1-15-2-23142
+        </span>
+    </p>
+
+    Once you execute and deploy your application. You can see the token value in fiddler as below:
+
+    <span>
+        <pre>
+        HTTP/1.1 200 OK
+        Cache-Control: no-store
+        Pragma: no-cache
+        Content-Length: 1115
+        Content-Type: application/json;charset=UTF-8
+        Server: Microsoft-HTTPAPI/2.0
+        client-request-id: 43224044-4a95-41cc-9716-fe9387529c49
+        Date: Tue, 06 Jan 2015 18:52:44 GMT
+        {"access_token":"token value encrypted>":491520}
+</pre>
+    </span>
+    <p>
+        My special credits to <a href="https://social.msdn.microsoft.com/profile/kenichiro%20nakamura/">Kenichiro Nakamura</a> for inspiring and providing technical insights to use Mobile SDK for CRM. <br />
+
+    </p>
+
+    <p>
+        Cheers,
+        Apurv<br />
+    </p>
+</body>
+</html>
