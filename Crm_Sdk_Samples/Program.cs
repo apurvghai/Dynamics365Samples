@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,17 @@ namespace Crm_Sdk_Samples
     {
         static void Main(string[] args)
         {
-            CrmConnection crmConnect = new CrmConnection();
-            string orgUrl = "https://apurvgh003.api.crm.dynamics.com/xrmservices/2011/organization.svc";
-            CheckOrphanSolutionComponents.DoRetrieve(crmConnect.GetCrmConnection(orgUrl, "admin@apurvgh003.onmicrosoft.com", "Password1@@", null, false));
+            CrmConnector crmConnector = new CrmConnector();
+            string orgUrl = "https://<Org>.api.crm.dynamics.com/xrmservices/2011/organization.svc";
+            crmConnector.GblUser = "UserName ";
+            crmConnector.GblPassword = "Password";
+            
+            //TODO : Under Progress
+
+            //using (OrganizationServiceProxy svcProxy = crmConnector.GetOrganizationProxy(orgUrl))
+            //{
+            //    RetrieveEntityMetadataWithAttributesIntoFile.DoRetrieveByEntity("account", svcProxy);
+            //}
         }
     }
 }
