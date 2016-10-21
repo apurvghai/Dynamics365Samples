@@ -18,7 +18,11 @@ namespace Crm_Sdk_Samples
     /// </summary>
     internal class CrmMetadataHelper
     {
-        //TODO: Work Under process
+      /// <summary>
+      /// This function is sample to show how Entity Metadata works alone.
+      /// </summary>
+      /// <param name="entitySchemaName"></param>
+      /// <param name="svcsClient"></param>
         internal void DoRetrieveByEntity(string entitySchemaName, IOrganizationService svcsClient)
         {
             RetrieveEntityRequest retrieveEntityRequest = new RetrieveEntityRequest()
@@ -28,7 +32,7 @@ namespace Crm_Sdk_Samples
         }
 
         /// <summary>
-        /// This function will retrieve all the entity metadata and will story into Xml File. The location is stored in app.config
+        /// This function will retrieve all the entity metadata & attributes and will story into Xml File. The location is stored in app.config
         /// </summary>
         /// <param name="svcsClient"></param>
         internal void DoRetrieveAllEntities(IOrganizationService svcsClient)
@@ -36,7 +40,7 @@ namespace Crm_Sdk_Samples
             string fileLocation = ConfigurationManager.AppSettings["MetadataFileLocation"].ToString();
             RetrieveAllEntitiesRequest request = new RetrieveAllEntitiesRequest()
             {
-                EntityFilters = EntityFilters.Entity,
+                EntityFilters = EntityFilters.All,
                 RetrieveAsIfPublished = true
             };
 
@@ -118,10 +122,26 @@ namespace Crm_Sdk_Samples
                         if (currentEntity.Description.UserLocalizedLabel != null)
                             metadataWriter.WriteElementString("Description", currentEntity.Description.UserLocalizedLabel.Label);
                         // End Entity Node
+
+                        //Start Exporting the Attributes for it.
+                        metadataWriter.WriteEndElement();
+                        metadataWriter.WriteStartElement("Attributes");
+
+                        foreach (AttributeMetadata currentAttribute in currentEntity.Attributes)
+                        {
+                            // Start Entity Node
+                            metadataWriter.WriteStartElement("Attribute");
+                            // Write the Entity's Information.
+                            metadataWriter.WriteElementString("EntitySchemaName", currentAttribute.SchemaName);
+                            metadataWriter.WriteElementString("IsCustomAttribute", currentAttribute.IsCustomAttribute.Value.ToString());
+                            metadataWriter.WriteEndElement();
+                        }
+
                         metadataWriter.WriteEndElement();
                     }
                 }
 
+                metadataWriter.WriteEndElement();
                 // End Metadata Xml Node
             }
         }
