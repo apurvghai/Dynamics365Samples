@@ -16,7 +16,7 @@ using Microsoft.Xrm.Sdk.Query;
 
 namespace Crm_Sdk_Samples
 {
-    public class CrmConnector
+    public class OldSchoolCrmConnection
     {
         public string GblUser { get; set; }
         public string GblPassword { get; set; }
