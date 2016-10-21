@@ -1,4 +1,5 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -15,16 +16,11 @@ namespace Crm_Sdk_Samples
         {
             //Running the sample
             CrmToolingHelper toolingHelper = new CrmToolingHelper();
-            toolingHelper.AuthType = "Office365";
-            toolingHelper.GblOrgUrl = "https://ORLGURL.api.crm.dynamics.com/xrmservices/2011/organization.svc";
-            toolingHelper.GblUser = "UserID ";
-            toolingHelper.GblPassword = "************";
-
-
+            IOrganizationService orgServcs = toolingHelper.GetConnectToCrm(CrmAuthType.Office365);
+            
             //Metadaata functions
-            RetrieveEntityMetadataWithAttributesIntoFile retrieveEntityMetadataWithAttributesIntoFile = new RetrieveEntityMetadataWithAttributesIntoFile();
-            retrieveEntityMetadataWithAttributesIntoFile.DoRetrieveByEntity("account", toolingHelper);
-            retrieveEntityMetadataWithAttributesIntoFile.DoRetrieveAllEntities(toolingHelper);
+            CrmMetadataHelper crmMetadataHelper = new CrmMetadataHelper();
+            crmMetadataHelper.DoRetrieveAllEntities(orgServcs);
 
         }
     }

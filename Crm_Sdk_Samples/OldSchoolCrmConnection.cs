@@ -1,8 +1,11 @@
-﻿//.NET DLLS
+﻿
+/*
+        Author : Apurv Ghai
+        Description: The program has been distributed as in to help the community members and do not certify to be use for Production Use.
+ */
+
+//.NET DLLS
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ServiceModel.Description;
 
 //CRM SDK DLLS
