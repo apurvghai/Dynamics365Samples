@@ -87,6 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CrmRetrieveMultiple.cs" />
     <Compile Include="OldSchoolCrmConnection.cs" />
     <Compile Include="CrmToolingHelper.cs" />
     <Compile Include="DeviceIdManager.cs" />
