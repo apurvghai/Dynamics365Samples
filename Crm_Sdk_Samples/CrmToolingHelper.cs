@@ -1,6 +1,6 @@
 ﻿/*
         Author : Apurv Ghai
-        Description: The program has been distributed as in to help the community members and do not certify to be use for Production Use.
+        Description: The program has been distributed *as is* to help the community members and do not certify to be used for Production Use.
  */
 
 using Microsoft.Crm.Sdk.Messages;
