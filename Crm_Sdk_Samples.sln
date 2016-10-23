@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crm_Sdk_Samples", "Crm_Sdk_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmOAuthMvcDemo", "WebApps\CrmOAuthMvcDemo\CrmOAuthMvcDemo\CrmOAuthMvcDemo.csproj", "{1942264F-189E-4A39-A90E-5E67F9BEE3E0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Jscripts", "Jscripts", "{620D9E6F-2582-4406-A228-C250E956589A}"
+	ProjectSection(SolutionItems) = preProject
+		WebApi-Update.js = WebApi-Update.js
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
