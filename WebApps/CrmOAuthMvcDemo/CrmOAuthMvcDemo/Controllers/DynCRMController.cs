@@ -41,7 +41,7 @@ namespace CrmOAuthMvcDemo.Controllers
             string userObjectID = ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
             try
             {
-                OrganizationWebProxyClient proxyClient = new OrganizationWebProxyClient(new Uri("https://apurvgh003.crm.dynamics.com/xrmservices/2011/organization.svc/web"), false);
+                OrganizationWebProxyClient proxyClient = new OrganizationWebProxyClient(new Uri("https://<orgname>.crm.dynamics.com/xrmservices/2011/organization.svc/web"), false);
                 proxyClient.SdkClientVersion = "8.0";
                 proxyClient.HeaderToken = await GetTokenForApplication();
 
