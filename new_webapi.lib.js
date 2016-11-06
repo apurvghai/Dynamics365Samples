@@ -33,7 +33,7 @@ function UpdateAccount() {
             if (this.status == 204) {
 
                 //Confirmation Message
-                Xrm.Utility.alertDialog("Done Deal")
+                Xrm.Utility.alertDialog("Account has been updated.")
             }
             else {
                 //debugger;
@@ -47,7 +47,7 @@ function UpdateAccount() {
 
 }
 
-function CreateAccount() {
+function CreateAccount(strAccountName) {
     var clientUrl = Xrm.Page.context.getClientUrl();
     var req = new XMLHttpRequest()
     req.open("POST", encodeURI(clientUrl + "/api/data/v8.2/accounts"), true);
@@ -66,20 +66,23 @@ function CreateAccount() {
             else {
                 debugger;
                 var error = JSON.parse(this.response).error;
-                Xrm.Utility.alertDialog("An Error Occurred");
+                Xrm.Utility.alertDialog("An Error Occurred creating account");
             }
         }
     };
     //Updating New Value
-    req.send(JSON.stringify({ name: "Contoso Account", telephone1: "701-999-0110" }));
+    req.send(JSON.stringify({ name: strAccountName, telephone1: "000-000-0000" }));
 }
 
+
+//This function is used to search strings. It reads the textbox value using DOM. 
+//The script below is used for Demo in HTML WebResource
 function SearchAccounts() {
 
     var strSearch = document.getElementById("txtAccountName").value;
     var clientUrl = Xrm.Page.context.getClientUrl();
     var req = new XMLHttpRequest();
-    //" + strSearch + "
+
     req.open("GET", encodeURI(clientUrl + "/api/data/v8.2/accounts?$select=name&$filter=contains(name,'" + strSearch + "')"));
     req.setRequestHeader("Accept", "application/json");
     req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
@@ -90,20 +93,40 @@ function SearchAccounts() {
             req.onreadystatechange = null;
             if (this.status == 200) {
                 var data = JSON.parse(this.response);
-                alert(data.value.length + " account(s) found.");
-                if (data && data.value) {
-                    for (var accountCount = 0; accountCount < data.value.length; accountCount++) {
-                        var accountName = data.value[accountCount].name;
-                        var eTag = data.value[accountCount]['@odata.etag'];
+                var intDataCount = data.value.length;
+                alert(intDataCount + " account(s) found with the string " + strSearch);
+                if (intDataCount > 0) {
+
+
+                    if (data && data.value) {
+                        for (var accountCount = 0; accountCount < data.value.length; accountCount++) {
+                            var accountName = data.value[accountCount].name;
+                            var eTag = data.value[accountCount]['@odata.etag'];
+                        }
                     }
+
+                    else {
+                        var error = JSON.parse(this.response).error;
+                        Xrm.Utility.alertDialog("An Error Occurred");
+                    }
+                } else {
+                    //if the account does not exist
+                    CreateIfNotAvailable(strSearch);
                 }
-            }
-            else {
-                var error = JSON.parse(this.response).error;
-                Xrm.Utility.alertDialog("An Error Occurred");
             }
         }
     };
     req.send(null);
+}
+
+function CreateIfNotAvailable(strSearch) {
+    var doCreateConfirm = confirm("Account with name" + strSearch + " does not exist. Would you like to create it?");
+    if (doCreateConfirm) {
+        CreateAccount(strSearch);
+    }
+    else {
+        alert("Alright, no problem!");
+    }
+
 }
 
