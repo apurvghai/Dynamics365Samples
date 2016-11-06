@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>WebAPI Demo using HTML and Jscript</title>
+    <script src="../ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <script type="text/javascript" src="https://apurvgh1.crm.dynamics.com/WebResources/new_webapi.lib.js"></script>
+    <script type="text/javascript">
+
+        function _getContext() {
+            var errorMessage = "Context is not available.";
+            if (typeof GetGlobalContext != "undefined")
+            { return GetGlobalContext(); }
+            else
+            {
+                if (typeof Xrm != "undefined") {
+                    return Xrm.Page.context;
+                }
+                else { throw new Error(errorMessage); }
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <table>
+
+        <tr>
+            <td colspan="2">
+                <b>Search for an existing account</b>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Account Name:
+            </td>
+            <td>
+                <input type="text" id="txtAccountName" name="txtAccountName" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" id="btnSearch" value="Search Account" onclick="return SearchAccounts();" />
+
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <div id="searchResults"></div>
+            </td>
+        </tr>
+
+
+    </table>
+</body>
+</html>
