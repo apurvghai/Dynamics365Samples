@@ -98,13 +98,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CrmMetadataHelper.cs" />
-    <Compile Include="WebAPI_Samples\EntityObject.cs" />
-    <Compile Include="WebAPI_Samples\CrmHttpResponseException.cs" />
-    <Compile Include="WebAPI_Samples\WebAPIOperationsHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WebAPI_Samples\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
