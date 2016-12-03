@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Threading.Tasks;
 
 namespace Crm_Sdk_Samples
 {
