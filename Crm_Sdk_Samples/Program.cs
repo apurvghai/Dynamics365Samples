@@ -14,6 +14,33 @@ namespace Crm_Sdk_Samples
             CrmMetadataHelper crmMetadataHelper = new CrmMetadataHelper();
             crmMetadataHelper.DoRetrieveAllEntities(orgServcs);
 
+
+            Program app = new Program();
+           // Task.WaitAll(Task.Run(async () => await app.CreateMyReordsAsync()));
+
+        }
+
+
+        async Task CreateMyReordsAsync()
+        {
+            WebApiOperationHelper apihelper = new WebApiOperationHelper();
+            apihelper.BaseOrganizationApiUrl = "https://org.api.crm.dynamics.com";
+            apihelper.ObtainOAuthToken();
+
+            if (!(string.IsNullOrEmpty(apihelper.AccessToken)))
+            {
+                //Create Sample Contact
+                JObject contact1 = new JObject();
+                contact1.Add("firstname", "Peter");
+                contact1.Add("lastname", "Cambel");
+
+                string filter = "?$select=firstname&$filter=contains(firstname,'Peter')";
+
+                //await apihelper.CreateEntityRecords("contacts", contact1);
+                await apihelper.SearchExistingRecord("contacts", filter);
+                Console.Read();
+            }
+            Console.Read();
         }
     }
 }
