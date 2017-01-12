@@ -30,10 +30,13 @@ namespace Crm_Sdk_Samples
         //Provides a persistent client-to-CRM server communication channel.
         HttpClient httpClient = new HttpClient();
 
+        /// <summary>
+        /// This function will return the access token based on authority, ClientId and Dynamics 365 Url (Applies to Online and OnPremise)
+        /// </summary>
         public void ObtainOAuthToken()
         {
-            string clientId = "<< App ID Guid >>";
-            Uri redirectUrl = new Uri("<< Redirect Url >>");
+            string clientId = "<< AppId>>";
+            Uri redirectUrl = new Uri("<< Redirect URL >>");
             AuthenticationParameters authParams = DiscoverAuthority();
             AuthenticationContext authContext = new AuthenticationContext(authParams.Authority, false);
             AuthenticationResult result = authContext.AcquireToken(authParams.Resource, clientId, redirectUrl, PromptBehavior.Always);
@@ -41,6 +44,10 @@ namespace Crm_Sdk_Samples
                 AccessToken = result.AccessToken;
         }
 
+        /// <summary>
+        /// This function returns the Authority Url (OAuth Endpoint) and Resource Url (Dynamics 365 Url)
+        /// </summary>
+        /// <returns></returns>
         private AuthenticationParameters DiscoverAuthority()
         {
             AuthenticationParameters authParamters = AuthenticationParameters.CreateFromResourceUrlAsync
@@ -48,6 +55,12 @@ namespace Crm_Sdk_Samples
             return authParamters;
         }
 
+        /// <summary>
+        /// This function can create any record type using Json Entity Objects
+        /// </summary>
+        /// <param name="entityName"></param>
+        /// <param name="entityObject"></param>
+        /// <returns></returns>
         public async Task CreateEntityRecords(string entityName, JObject entityObject)
         {
             httpClient = CreateDynHttpClient(AccessToken, entityName);
@@ -63,10 +76,14 @@ namespace Crm_Sdk_Samples
                 //Dispose the Object :: Best Practice
                 httpClient.Dispose();
             }
-
         }
 
-
+        /// <summary>
+        /// This function can create any record type by providing the Odata filters
+        /// </summary>
+        /// <param name="entityName"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         public async Task SearchExistingRecord(string entityName, string filter)
         {
             httpClient = CreateDynHttpClient(AccessToken, entityName);
@@ -81,6 +98,25 @@ namespace Crm_Sdk_Samples
                 // Do something with response. Example get content:
                 Console.WriteLine(objParsedContent);
                 Console.WriteLine("Records Found");
+                Console.ReadKey();
+                //Dispose the Object :: Best Practice
+                httpClient.Dispose();
+            }
+        }
+
+
+        public async Task DeleteExistingRecord(string entityName, JObject entityObject)
+        {
+            httpClient = CreateDynHttpClient(AccessToken, entityName);
+            HttpRequestMessage createHttpRequest = new HttpRequestMessage(HttpMethod.Post, BaseOrganizationApiUrl + "/api/data/v8.1/" + entityName);
+            createHttpRequest.Content = new StringContent(entityObject.ToString(), Encoding.UTF8, "application/json");
+            var response = await httpClient.SendAsync(createHttpRequest);
+           
+            response.EnsureSuccessStatusCode();
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                // Do something with response. Example get content:
+                Console.WriteLine("The record was created successfully.");
                 Console.ReadKey();
                 //Dispose the Object :: Best Practice
                 httpClient.Dispose();
