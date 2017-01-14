@@ -6,7 +6,7 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
-namespace Crm_Sdk_Samples
+namespace Dyn365Samples
 {
     /// <summary>
     /// This class will demonstrate the examples for using Retrieve Multiple using CRM SDK

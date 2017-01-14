@@ -3,7 +3,7 @@
         Description: The program has been distributed *as is* to help the community members and do not certify to be used for Production Use.
  */
 
-using Crm_Sdk_Samples.WebAPI_Samples;
+using Dyn365Samples.WebAPI_Samples;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,9 +19,9 @@ using System.Threading.Tasks;
 /// <summary>
 /// This helper provides facility to connect to Dynamics 365 using webapi and perform basic CRUD Operations.
 /// </summary>
-namespace Crm_Sdk_Samples
+namespace Dyn365Samples
 {
-    public class WebApiOperationHelper
+    public class WebAPIHelper
     {
         public string AccessToken { get; set; }
 

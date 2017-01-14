@@ -10,7 +10,7 @@ using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Configuration;
 
-namespace Crm_Sdk_Samples
+namespace Dyn365Samples
 {
     /// <summary>
     /// These enums provide easy access to determine the CRM Type of Authentication you want your app to perform.

@@ -17,7 +17,7 @@ using Microsoft.Xrm.Sdk.Query;
 
 
 
-namespace Crm_Sdk_Samples
+namespace Dyn365Samples
 {
     public class OldSchoolCrmConnection
     {

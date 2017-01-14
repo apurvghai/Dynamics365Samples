@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crm_Sdk_Samples.WebAPI_Samples
+namespace Dyn365Samples.WebAPI_Samples
 {
 
     /// <summary>

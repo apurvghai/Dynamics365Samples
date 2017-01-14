@@ -11,7 +11,7 @@ using System.Configuration;
 using System.IO;
 using System.Xml;
 
-namespace Crm_Sdk_Samples
+namespace Dyn365Samples
 {
     /// <summary>
     /// Implementation of MSDN Sample for Retrieving All the Entities Metadata.

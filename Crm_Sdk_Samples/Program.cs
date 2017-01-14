@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
-namespace Crm_Sdk_Samples
+namespace Dyn365Samples
 {
     class Program
     {
@@ -26,7 +26,7 @@ namespace Crm_Sdk_Samples
 
         async Task CreateMyReordsAsync()
         {
-            WebApiOperationHelper apihelper = new WebApiOperationHelper();
+            WebAPIHelper apihelper = new WebAPIHelper();
             apihelper.BaseOrganizationApiUrl = "https://org.api.crm.dynamics.com";
             apihelper.ObtainOAuthToken();
 
