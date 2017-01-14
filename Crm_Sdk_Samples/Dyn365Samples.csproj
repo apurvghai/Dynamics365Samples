@@ -99,7 +99,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CrmMetadataHelper.cs" />
     <Compile Include="WebAPISamples\CrmHttpResponseException.cs" />
-    <Compile Include="WebAPISamples\WebApiOperationHelper.cs" />
+    <Compile Include="WebAPISamples\WebAPIHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

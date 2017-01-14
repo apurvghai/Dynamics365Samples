@@ -3,7 +3,6 @@
         Description: The program has been distributed *as is* to help the community members and do not certify to be used for Production Use.
  */
 
-using Dyn365Samples.WebAPI_Samples;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
