@@ -1,0 +1,74 @@
+﻿<Window x:Class="Dyn365OAuthTshooter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Dyn365OAuthTshooter"
+        mc:Ignorable="d"
+        Title="Dynamics 365 OAuth Tshooter - Apurv Ghai" Height="754.976" Width="548.921" ResizeMode="CanMinimize" BorderThickness="1">
+    <Grid>
+        <Label x:Name="lblOrgUrl" Content="Dynamics 365 (CRM) URL" HorizontalAlignment="Left" Margin="22,6,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.452,-0.039" FontWeight="Bold">
+            <Label.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE0E1E6" Offset="0"/>
+                    <GradientStop Color="#FF0F1CD2" Offset="1"/>
+                    <GradientStop Color="#FE9798A8" Offset="0.085"/>
+                </LinearGradientBrush>
+            </Label.Foreground>
+        </Label>
+        <TextBox x:Name="txtOrgUrl" HorizontalAlignment="Left" Height="23" Margin="22,37,0,0" TextWrapping="Wrap" Text="https://org.api.crm.dynamics.com" VerticalAlignment="Top" Width="498"/>
+        <Label x:Name="lblOrgUrl_Copy" Content="Client ID {GUID}" HorizontalAlignment="Left" Margin="22,72,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.452,-0.039" FontWeight="Bold">
+            <Label.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE0E1E6" Offset="0"/>
+                    <GradientStop Color="#FF0F1CD2" Offset="1"/>
+                    <GradientStop Color="#FE9798A8" Offset="0.085"/>
+                </LinearGradientBrush>
+            </Label.Foreground>
+        </Label>
+        <TextBox x:Name="txtClientId" HorizontalAlignment="Left" Height="23" Margin="22,103,0,0" TextWrapping="Wrap" Text="Client ID {32 Digit Format}" VerticalAlignment="Top" Width="498"/>
+        <Label x:Name="lblOrgUrl_Copy1" Content="Redirect URL" HorizontalAlignment="Left" Margin="22,140,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.452,-0.039" FontWeight="Bold">
+            <Label.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE0E1E6" Offset="0"/>
+                    <GradientStop Color="#FF0F1CD2" Offset="1"/>
+                    <GradientStop Color="#FE9798A8" Offset="0.085"/>
+                </LinearGradientBrush>
+            </Label.Foreground>
+        </Label>
+        <TextBox x:Name="txtRedirectUrl" HorizontalAlignment="Left" Height="23" Margin="22,171,0,0" TextWrapping="Wrap" Text="Specify Redirect URL (Registered in Azure or ADFS)" VerticalAlignment="Top" Width="498"/>
+        <Label x:Name="lblOrgUrl_Copy2" Content="Discovery URL" HorizontalAlignment="Left" Margin="22,209,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.452,-0.039" FontWeight="Bold">
+            <Label.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE0E1E6" Offset="0"/>
+                    <GradientStop Color="#FF0F1CD2" Offset="1"/>
+                    <GradientStop Color="#FE9798A8" Offset="0.085"/>
+                </LinearGradientBrush>
+            </Label.Foreground>
+        </Label>
+        <TextBox x:Name="txtDiscoveryUrl" HorizontalAlignment="Left" Height="23" Margin="22,235,0,0" TextWrapping="Wrap" Text="[Generated]" VerticalAlignment="Top" Width="498" IsReadOnly="True"/>
+        <TextBox x:Name="txtoauthEndpoint" HorizontalAlignment="Left" Height="23" Margin="22,299,0,0" TextWrapping="Wrap" Text="[Generated]" VerticalAlignment="Top" Width="498" IsReadOnly="True"/>
+        <Label x:Name="lblOrgUrl_Copy4" Content="Output" HorizontalAlignment="Left" Margin="22,371,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.452,-0.039" FontWeight="Bold">
+            <Label.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE0E1E6" Offset="0"/>
+                    <GradientStop Color="#FF0F1CD2" Offset="1"/>
+                    <GradientStop Color="#FE9798A8" Offset="0.085"/>
+                </LinearGradientBrush>
+            </Label.Foreground>
+        </Label>
+        <TextBox x:Name="txtOutput" HorizontalAlignment="Left" Height="304" Margin="22,402,0,0" TextWrapping="Wrap" Text="..." VerticalAlignment="Top" Width="498"/>
+        <Label x:Name="lblOrgUrl_Copy3" Content="Oauth Endpoint" HorizontalAlignment="Left" Margin="22,271,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.452,-0.039" FontWeight="Bold">
+            <Label.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE0E1E6" Offset="0"/>
+                    <GradientStop Color="#FF0F1CD2" Offset="1"/>
+                    <GradientStop Color="#FE9798A8" Offset="0.085"/>
+                </LinearGradientBrush>
+            </Label.Foreground>
+        </Label>
+        <Button x:Name="btnConnect" Content="Connect" HorizontalAlignment="Left" Margin="438,342,0,0" VerticalAlignment="Top" Width="82" Height="25" Foreground="Black" FontWeight="Bold" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnConnect_Click">
+        </Button>
+
+    </Grid>
+</Window>
