@@ -117,7 +117,6 @@ namespace Dyn365Samples
                     // Do something with response. Example get content:
                     Console.WriteLine("The record was created successfully.");
                     Console.ReadKey();
-                    httpClient.Dispose();
                 }
             }
         }
