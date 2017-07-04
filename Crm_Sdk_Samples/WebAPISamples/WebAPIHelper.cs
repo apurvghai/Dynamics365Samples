@@ -50,7 +50,7 @@ namespace Dyn365Samples
         private AuthenticationParameters DiscoverAuthority()
         {
             AuthenticationParameters authParamters = AuthenticationParameters.CreateFromResourceUrlAsync
-                (new Uri(BaseOrganizationApiUrl + "/api/data/v8.1")).Result;
+                (new Uri(BaseOrganizationApiUrl + "/api/data/")).Result;
             return authParamters;
         }
 
@@ -62,18 +62,18 @@ namespace Dyn365Samples
         /// <returns></returns>
         public async Task CreateEntityRecords(string entityName, JObject entityObject)
         {
-            httpClient = CreateDynHttpClient(AccessToken, entityName);
-            HttpRequestMessage createHttpRequest = new HttpRequestMessage(HttpMethod.Post, BaseOrganizationApiUrl + "/api/data/v8.1/" + entityName);
-            createHttpRequest.Content = new StringContent(entityObject.ToString(), Encoding.UTF8, "application/json");
-            var response = await httpClient.SendAsync(createHttpRequest);
-            response.EnsureSuccessStatusCode();
-            if (response.StatusCode == HttpStatusCode.NoContent)
+            using (httpClient = CreateDynHttpClient(AccessToken, entityName))
             {
-                // Do something with response. Example get content:
-                Console.WriteLine("The record was created successfully.");
-                Console.ReadKey();
-                //Dispose the Object :: Best Practice
-                httpClient.Dispose();
+                HttpRequestMessage createHttpRequest = new HttpRequestMessage(HttpMethod.Post, BaseOrganizationApiUrl + "/api/data/v8.1/" + entityName);
+                createHttpRequest.Content = new StringContent(entityObject.ToString(), Encoding.UTF8, "application/json");
+                var response = await httpClient.SendAsync(createHttpRequest);
+                response.EnsureSuccessStatusCode();
+                if (response.StatusCode == HttpStatusCode.NoContent)
+                {
+                    // Do something with response. Example get content:
+                    Console.WriteLine("The record was created successfully.");
+                    Console.ReadKey();
+                }
             }
         }
 
@@ -85,40 +85,65 @@ namespace Dyn365Samples
         /// <returns></returns>
         public async Task SearchExistingRecord(string entityName, string filter)
         {
-            httpClient = CreateDynHttpClient(AccessToken, entityName);
-            string completedFilterCondition = BaseOrganizationApiUrl + "/api/data/v8.1/" + entityName + filter;
-            var response = await httpClient.GetAsync(completedFilterCondition);
-            response.EnsureSuccessStatusCode();
-            if (response.StatusCode == HttpStatusCode.OK)
+            using (httpClient = CreateDynHttpClient(AccessToken, entityName))
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var objParsedContent = JsonConvert.DeserializeObject(content);
+                string completedFilterCondition = BaseOrganizationApiUrl + "/api/data/v8.1/" + entityName + filter;
+                var response = await httpClient.GetAsync(completedFilterCondition);
+                response.EnsureSuccessStatusCode();
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var objParsedContent = JsonConvert.DeserializeObject(content);
+                    // Do something with response. Example get content:
+                    Console.WriteLine(objParsedContent);
+                    Console.WriteLine("Records Found");
+                    Console.ReadKey();
 
-                // Do something with response. Example get content:
-                Console.WriteLine(objParsedContent);
-                Console.WriteLine("Records Found");
-                Console.ReadKey();
-                //Dispose the Object :: Best Practice
-                httpClient.Dispose();
+                }
             }
         }
 
 
         public async Task DeleteExistingRecord(string entityName, JObject entityObject)
         {
-            httpClient = CreateDynHttpClient(AccessToken, entityName);
-            HttpRequestMessage createHttpRequest = new HttpRequestMessage(HttpMethod.Post, BaseOrganizationApiUrl + "/api/data/v8.1/" + entityName);
-            createHttpRequest.Content = new StringContent(entityObject.ToString(), Encoding.UTF8, "application/json");
-            var response = await httpClient.SendAsync(createHttpRequest);
-           
-            response.EnsureSuccessStatusCode();
-            if (response.StatusCode == HttpStatusCode.NoContent)
+            using (httpClient = CreateDynHttpClient(AccessToken, entityName))
             {
-                // Do something with response. Example get content:
-                Console.WriteLine("The record was created successfully.");
-                Console.ReadKey();
-                //Dispose the Object :: Best Practice
-                httpClient.Dispose();
+                HttpRequestMessage createHttpRequest = new HttpRequestMessage(HttpMethod.Post, BaseOrganizationApiUrl + "/api/data/v8.1/" + entityName);
+                createHttpRequest.Content = new StringContent(entityObject.ToString(), Encoding.UTF8, "application/json");
+                var response = await httpClient.SendAsync(createHttpRequest);
+                response.EnsureSuccessStatusCode();
+                if (response.StatusCode == HttpStatusCode.NoContent)
+                {
+                    // Do something with response. Example get content:
+                    Console.WriteLine("The record was created successfully.");
+                    Console.ReadKey();
+                    httpClient.Dispose();
+                }
+            }
+        }
+
+        /// <summary>
+        /// This function is responsible to update records. 
+        /// </summary>
+        /// <param name="entityName">Eg: /account(Guid-Here)</param>
+        /// <param name="entityObject">JObject Entity values</param>
+        /// <returns></returns>
+        public async Task<object> UpdateExistingRecord(string entityName, JObject entityObject)
+        {
+            HttpClient httpClient;
+            using (httpClient = CreateDynHttpClient(AccessToken, entityName))
+            {
+                HttpRequestMessage updateHttpMessage = null;
+                updateHttpMessage = new HttpRequestMessage(new HttpMethod("PATCH"), BaseOrganizationApiUrl + "/api/data/v8.2/" + entityName);
+                updateHttpMessage.Content = new StringContent(entityObject.ToString(), Encoding.UTF8, "application/json");
+                var response = await httpClient.SendAsync(updateHttpMessage);
+                response.EnsureSuccessStatusCode();
+                if (response.StatusCode == HttpStatusCode.NoContent)
+                {
+                    var recordId = (response.Headers.Location.Segments[5].Split('('))[1].Remove(36);
+                    return recordId;
+                }
+                return false;
             }
         }
 
