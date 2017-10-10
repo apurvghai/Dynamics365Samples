@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dyn365Samples", "Dyn365Samples\Dyn365Samples.csproj", "{9736BE18-6A44-4523-8F2A-2AA76EC357B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D365Samples", "Dyn365Samples\Dyn365Samples.csproj", "{9736BE18-6A44-4523-8F2A-2AA76EC357B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrmOAuthMvcDemo", "WebApps\CrmOAuthMvcDemo\CrmOAuthMvcDemo\CrmOAuthMvcDemo.csproj", "{1942264F-189E-4A39-A90E-5E67F9BEE3E0}"
 EndProject
