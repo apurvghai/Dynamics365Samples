@@ -29,6 +29,7 @@ namespace Dyn365OAuthTshooter
         public string clientId { get; set; }
         public string redirectUrl { get; set; }
 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -47,10 +48,11 @@ namespace Dyn365OAuthTshooter
         async void DoWork()
         {
             await txtOutput.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.txtOutput.Text = string.Empty));
-            await txtOutput.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.txtOutput.Text = "Conecting..."));
+            await txtOutput.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.txtOutput.Text = "Connecting..."));
             try
             {
                 WebAPIHelper apiHelper = new WebAPIHelper();
+                apiHelper.BaseOrganizationApiUrl = OrgUrl;                
                 AuthenticationParameters authParams =  apiHelper.DiscoverAuthority();
                 await txtOutput.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
                 {
@@ -59,16 +61,18 @@ namespace Dyn365OAuthTshooter
                 }));
 
                 apiHelper.BaseOrganizationApiUrl = OrgUrl;
-                apiHelper.ObtainOAuthToken(clientId, redirectUrl, authParams);
+               await apiHelper.ObtainOAuthToken(clientId, redirectUrl, authParams);
                 await txtOutput.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.txtOutput.Text = "Finished Obtaining Access Token"));
                 if (!(string.IsNullOrEmpty(apiHelper.AccessToken)))
                 {
-                    await txtOutput.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.txtOutput.Text = "Creating Sample Account in CRM"));
+                    //await txtOutput.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.txtOutput.Text = "Creating Sample Account in CRM"));
 
                     //Create Sample Contact
                     JObject accountJobj = new JObject();
                     accountJobj.Add("name", "SDK Account");
-                    await apiHelper.CreateEntityRecords("accounts", accountJobj, "v8.1");
+                    //await apiHelper.CreateEntityRecords("accounts", accountJobj, "v8.1");
+
+                    await txtOutput.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.txtOutput.Text = $"Printing Access Token {apiHelper.AccessToken}"));
 
                     await txtOutput.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.txtOutput.Text = "Completed Acount Creation"));
                 }

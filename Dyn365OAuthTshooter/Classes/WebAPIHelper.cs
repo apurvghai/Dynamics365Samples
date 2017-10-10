@@ -32,11 +32,12 @@ namespace Dyn365Samples
         /// <summary>
         /// This function will return the access token based on authority, ClientId and Dynamics 365 Url (Applies to Online and OnPremise)
         /// </summary>
-        public void ObtainOAuthToken(string clientId, string redirectStringUrl, AuthenticationParameters authParams)
+        public async Task ObtainOAuthToken(string clientId, string redirectStringUrl, AuthenticationParameters authParams)
         {
             Uri redirectUrl = new Uri(redirectStringUrl);
-            AuthenticationContext authContext = new AuthenticationContext(authParams.Authority, false);
-            AuthenticationResult result = authContext.AcquireToken(authParams.Resource, clientId, redirectUrl, PromptBehavior.Always);
+            AuthenticationContext authContext = new AuthenticationContext(authParams.Authority);
+            AuthenticationResult result = await     authContext.AcquireTokenAsync(authParams.Resource, clientId,
+                redirectUrl, new PlatformParameters(PromptBehavior.Always));
             if (result != null)
                 AccessToken = result.AccessToken;
         }
