@@ -12,78 +12,36 @@ using System.Configuration;
 
 namespace Dyn365Samples
 {
-    /// <summary>
-    /// These enums provide easy access to determine the CRM Type of Authentication you want your app to perform.
-    /// </summary>
-    enum CrmAuthType
-    {
-        ADWithUserName = 1,
-        IntegratedAD = 2,
-        Office365 = 3,
-        IFD = 4,
-        OAuth = 5,
-        OAuthWithUserInterface = 6,
-    }
+    /*
+         CrmServiceClient has logging option, please review App.config for more options.  
+    */
     internal class CrmToolingHelper
     {
-        private IOrganizationService crmOrgService;
+        /// <summary>
+        /// Returns the Crm Service Client. 
+        /// </summary>
+        /// <returns>returns CrmServiceClient</returns>
+        internal CrmServiceClient GetServiceClient()
+        {
+            //Retrieve the connection string from App.Config
+            string connectingString = ConfigurationManager.ConnectionStrings["CrmConnectiongString"].ConnectionString;
+            CrmServiceClient serviceClient = new CrmServiceClient(connectingString);
+            return serviceClient;
+        }
+
 
         /// <summary>
-        /// Returns the Crm Service Connecting Object. 
+        /// Sample function to perform WhoAmI and retrieve full name of the User
         /// </summary>
-        /// <param name="crmAuthType">Provide the authentication type, it will pick up the connecting string from app.config</param>
         /// <returns></returns>
-        internal IOrganizationService GetConnectToCrm(CrmAuthType crmAuthType)
+        internal string GetLoggedOnUser()
         {
-            string connectingString = string.Empty;
-
-            switch (crmAuthType)
+            using (var client = GetServiceClient())
             {
-                case CrmAuthType.ADWithUserName:
-                    connectingString = ConfigurationManager.AppSettings["XrmToolingConnectionADNamed"].ToString();
-                    break;
-
-                case CrmAuthType.IntegratedAD:
-                    connectingString = ConfigurationManager.AppSettings["XrmToolingConnectionADIntegrated"].ToString();
-                    break;
-
-                case CrmAuthType.Office365:
-                    connectingString = ConfigurationManager.AppSettings["XrmToolingConnectionOffice365"].ToString();
-                    break;
-
-                case CrmAuthType.IFD:
-                    connectingString = ConfigurationManager.AppSettings["XrmToolingConnectionIFD"].ToString();
-                    break;
-
-                case CrmAuthType.OAuth:
-                    connectingString = ConfigurationManager.AppSettings["XrmToolingConnectionOAuth"].ToString();
-                    break;
-
-                case CrmAuthType.OAuthWithUserInterface:
-                    connectingString = ConfigurationManager.AppSettings["XrmToolingConnectionOAuthUX"].ToString();
-                    break;
+                Guid userid = ((WhoAmIResponse)client.Execute(new WhoAmIRequest())).UserId;
+                Entity systemUserEntity = client.Retrieve("systemuser", userid, new ColumnSet(true));
+                return systemUserEntity.GetAttributeValue<string>("fullname").ToString();
             }
-
-            CrmServiceClient crmSvcClient = new CrmServiceClient(connectingString);
-            crmOrgService = crmSvcClient.OrganizationWebProxyClient != null ?
-                (IOrganizationService)crmSvcClient.OrganizationWebProxyClient : crmSvcClient.OrganizationServiceProxy;
-
-            return crmOrgService;
         }
-
-
-        /// <summary>
-        /// This function will provide you the user full name whose is currently logged in Using CrmServiceClient
-        /// </summary>
-        /// <param name="crmAuthType"></param>
-        /// <returns></returns>
-        internal string GetLoggedOnUser(CrmAuthType crmAuthType)
-        {
-            IOrganizationService serviceProxy = GetConnectToCrm(crmAuthType);
-            Guid userid = ((WhoAmIResponse)serviceProxy.Execute(new WhoAmIRequest())).UserId;
-            Entity systemUserEntity = serviceProxy.Retrieve("systemuser", userid, new ColumnSet(true));
-            return systemUserEntity.GetAttributeValue<string>("fullname").ToString();
-        }
-
     }
 }

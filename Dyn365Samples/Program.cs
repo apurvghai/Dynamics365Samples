@@ -11,11 +11,11 @@ namespace Dyn365Samples
         {
             //Running the sample
             CrmToolingHelper toolingHelper = new CrmToolingHelper();
-            IOrganizationService orgServcs = toolingHelper.GetConnectToCrm(CrmAuthType.Office365);
+            var client = toolingHelper.GetServiceClient();
             
             //Metadaata functions
             CrmMetadataHelper crmMetadataHelper = new CrmMetadataHelper();
-            crmMetadataHelper.DoRetrieveAllEntities(orgServcs);
+            crmMetadataHelper.DoRetrieveAllEntities(client);
 
 
             Program app = new Program();
