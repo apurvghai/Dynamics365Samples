@@ -6,6 +6,7 @@
 ### ADAL based authentication (Native Apps)
 ### ADAL based authentication (WebAPI/WebApps using MVC)
 ### Oauth Native application Troubleshooting
+### CRM Web Resources (Jscripts) WebAPI CRUD Operations
 
 
 
