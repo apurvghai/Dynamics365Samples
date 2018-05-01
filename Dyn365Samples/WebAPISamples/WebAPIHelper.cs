@@ -23,36 +23,40 @@ namespace Dyn365Samples
     public class WebAPIHelper
     {
         public string AccessToken { get; set; }
-
         public string BaseOrganizationApiUrl { get; set; }
-
-        //Provides a persistent client-to-CRM server communication channel.
-        HttpClient httpClient = new HttpClient();
+        private const string Authority = "https://login.microsoftonline.com/<TenantID> or <domain.onmicrosoft.com>";
+        private const string Resource = "https://YOURORG.crm.dynamics.com";
+        static AuthenticationContext authContext = new AuthenticationContext(Authority, false);
+        static AuthenticationResult authenticationResult;
 
         /// <summary>
-        /// This function will return the access token based on authority, ClientId and Dynamics 365 Url (Applies to Online and OnPremise)
+        /// Use this method for Interactive authentication. Auth is handled by ADFS Login Prompt
         /// </summary>
-        public void ObtainOAuthToken()
+        public async Task<string> GetTokenInteractiveAsync()
         {
             string clientId = "<< AppId>>";
             Uri redirectUrl = new Uri("<< Redirect URL >>");
-            AuthenticationParameters authParams = DiscoverAuthority();
-            AuthenticationContext authContext = new AuthenticationContext(authParams.Authority, false);
-            AuthenticationResult result = authContext.AcquireToken(authParams.Resource, clientId, redirectUrl, PromptBehavior.Always);
-            if (result != null)
-                AccessToken = result.AccessToken;
+            //Performance / Token Renewal 
+            if (authenticationResult == null || DateTime.UtcNow.AddMinutes(15) >= authenticationResult.ExpiresOn)
+                authenticationResult = await authContext.AcquireTokenAsync(Resource, clientId, redirectUrl, new PlatformParameters(PromptBehavior.Always));
+            return authenticationResult.AccessToken;
         }
 
         /// <summary>
-        /// This function returns the Authority Url (OAuth Endpoint) and Resource Url (Dynamics 365 Url)
+        /// Use this method if you are connecting your WebAPI/WebApp Azure App with client secret. If you are using this, 
+        /// please make sure that Client or Application ID is registered as applicatio user in CRM
         /// </summary>
         /// <returns></returns>
-        private AuthenticationParameters DiscoverAuthority()
+        public async Task<string> GetTokenNonInteractiveAsync()
         {
-            AuthenticationParameters authParamters = AuthenticationParameters.CreateFromResourceUrlAsync
-                (new Uri(BaseOrganizationApiUrl + "/api/data/")).Result;
-            return authParamters;
+            string clientId = "<< AppId>>";
+            ClientCredential clientCredentials = new ClientCredential(clientId, "<< Client secret >>");
+            //Performance / Token Renewal 
+            if (authenticationResult == null || DateTime.UtcNow.AddMinutes(15) >= authenticationResult.ExpiresOn)
+                authenticationResult = await authContext.AcquireTokenAsync(Resource, clientCredentials);
+            return authenticationResult.AccessToken;
         }
+
 
         /// <summary>
         /// This function can create any record type using Json Entity Objects
@@ -62,7 +66,7 @@ namespace Dyn365Samples
         /// <returns></returns>
         public async Task CreateEntityRecords(string entityName, JObject entityObject)
         {
-            using (httpClient = CreateDynHttpClient(AccessToken, entityName))
+            using (var httpClient = GetClient(AccessToken, entityName))
             {
                 HttpRequestMessage createHttpRequest = new HttpRequestMessage(HttpMethod.Post, BaseOrganizationApiUrl + "/api/data/v8.1/" + entityName);
                 createHttpRequest.Content = new StringContent(entityObject.ToString(), Encoding.UTF8, "application/json");
@@ -85,7 +89,7 @@ namespace Dyn365Samples
         /// <returns></returns>
         public async Task SearchExistingRecord(string entityName, string filter)
         {
-            using (httpClient = CreateDynHttpClient(AccessToken, entityName))
+            using (var httpClient = GetClient(AccessToken, entityName))
             {
                 string completedFilterCondition = BaseOrganizationApiUrl + "/api/data/v8.1/" + entityName + filter;
                 var response = await httpClient.GetAsync(completedFilterCondition);
@@ -106,13 +110,12 @@ namespace Dyn365Samples
 
         public async Task DeleteExistingRecord(string entityName, JObject entityObject)
         {
-            using (httpClient = CreateDynHttpClient(AccessToken, entityName))
+            using (var httpClient = GetClient(AccessToken, entityName))
             {
                 HttpRequestMessage createHttpRequest = new HttpRequestMessage(HttpMethod.Post, BaseOrganizationApiUrl + "/api/data/v8.1/" + entityName);
                 createHttpRequest.Content = new StringContent(entityObject.ToString(), Encoding.UTF8, "application/json");
                 var response = await httpClient.SendAsync(createHttpRequest);
-                response.EnsureSuccessStatusCode();
-                if (response.StatusCode == HttpStatusCode.NoContent)
+                if (response.IsSuccessStatusCode)
                 {
                     // Do something with response. Example get content:
                     Console.WriteLine("The record was created successfully.");
@@ -130,14 +133,13 @@ namespace Dyn365Samples
         public async Task<object> UpdateExistingRecord(string entityName, JObject entityObject)
         {
             HttpClient httpClient;
-            using (httpClient = CreateDynHttpClient(AccessToken, entityName))
+            using (httpClient = GetClient(AccessToken, entityName))
             {
                 HttpRequestMessage updateHttpMessage = null;
                 updateHttpMessage = new HttpRequestMessage(new HttpMethod("PATCH"), BaseOrganizationApiUrl + "/api/data/v8.2/" + entityName);
                 updateHttpMessage.Content = new StringContent(entityObject.ToString(), Encoding.UTF8, "application/json");
                 var response = await httpClient.SendAsync(updateHttpMessage);
-                response.EnsureSuccessStatusCode();
-                if (response.StatusCode == HttpStatusCode.NoContent)
+                if (response.IsSuccessStatusCode)
                 {
                     var recordId = (response.Headers.Location.Segments[5].Split('('))[1].Remove(36);
                     return recordId;
@@ -146,7 +148,7 @@ namespace Dyn365Samples
             }
         }
 
-        private HttpClient CreateDynHttpClient(string accessToken, string apiEntity)
+        private HttpClient GetClient(string accessToken, string apiEntity)
         {
 
             HttpClient client = new HttpClient();

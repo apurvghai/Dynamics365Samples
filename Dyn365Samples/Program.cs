@@ -28,7 +28,7 @@ namespace Dyn365Samples
         {
             WebAPIHelper apihelper = new WebAPIHelper();
             apihelper.BaseOrganizationApiUrl = "https://org.api.crm.dynamics.com";
-            apihelper.ObtainOAuthToken();
+            apihelper.GetTokenInteractiveAsync();
 
             if (!(string.IsNullOrEmpty(apihelper.AccessToken)))
             {
