@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    .crmurl {
+        padding: 4px;
+        width: 28em;
+        align-content: center;
+    }
+
+    .start-page-content {
+        margin-top: 20em;
+        text-align: center;
+    }
+</style>
+<div class="start-page-content" id="SearchOrg">
+    <div class="col-lg-12">
+        <h3>Dynamics CE URL:</h3>
+    </div>
+    <div class="row"></div>
+    <div class="col-lg-12">
+        <input type="text" placeholder="https://yourinstance.crm.dynamics.com" id="txtOrgUrl" class="crmurl" />&nbsp; &nbsp;<button data-bind="click: Search" class="btn btn-warning">
+            <span data-bind="html: SearchSpinner"></span>
+        </button>
+    </div>
+    <div class="row"></div>
+    <div class="col-lg-12">
+        <p style="margin-top: 15px;" data-bind="html: UserName"></p>
+    </div>
+    <div class="row"></div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function OrgMetadataModel() {
+        var self = this;
+        self.Version = ko.observable();
+        self.Url = ko.observable();
+        self.UserName = ko.observable();
+        self.SearchSpinner = ko.observable('<i class="fas fa-arrow-right"></i>');
+        self.Search = () => {
+            var orgUrl = $(txtOrgUrl).val();
+            var apiUrl = `/api/crm/v1/User?resource=${orgUrl}`;
+            self.SearchSpinner("Searching..");
+            self.Url(orgUrl);
+            $.get(apiUrl, (response) => {
+                if (response) {
+                    self.SearchSpinner('<i class="fas fa-check" style="color: green"></i>');
+                    var fullName = response.deserializedContent.firstname;
+                    self.UserName(`<p>Yay! We found you <strong> ${fullName} </strong></p>`);
+                    GetOrSetOrgInformation(orgUrl);
+                    window.setTimeout(() => {
+                        location.href = `/Home/Accounts?resource=${orgUrl}`;
+                    }, 5000)
+                }
+            })
+        }
+    }
+
+    function GetOrSetOrgInformation(orgUrl) {
+        document.cookie = `OrganizationUrl=${orgUrl};path=/`;
+    }
+
+    $(() => {
+        //Body Onload
+        ko.applyBindings(new OrgMetadataModel(), SearchOrg)
+    })
+</script>

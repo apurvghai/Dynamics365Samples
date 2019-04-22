@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-lg-12">
+
+    <div class="card" id="AccountsView">
+        <div class="card-header">My Active Accounts</div>
+        <div class="card-body">
+            <div class="col-lg-12">
+                <span data-bind="html: SearchSpinner"></span>
+            </div>
+            <!--ko if: ActiveAccounts-->
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-4"><h5>Id</h5></div>
+                    <div class="col-8"><h5>Name</h5></div>
+                </div>
+            </div>
+            <div class="col-lg-12" data-bind="foreach: ActiveAccounts">
+
+                <div class="row">
+                    <div class="col-4" data-bind="text: name"></div>
+                    <div class="col-8" data-bind="text: FormatDate(createdon)"></div>
+                </div>
+            </div>
+            <!--/ko-->
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/locale/tr.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
+<script>
+    function FormatDate(date) {
+        return moment(date).format('LLL');
+    }
+    function AccountsViewModel() {
+        var self = this;
+        self.ActiveAccounts = ko.observableArray();
+        self.SearchSpinner = ko.observable('<div class="spinner-border text-success" role="status"><span class="sr-only">Loading...</span></div>');
+
+        function LoadAccounts() {
+            var url = `/api/crm/v1/Odata?resource=https://apurvghd365.crm.dynamics.com&path=${encodeURIComponent("accounts?$select=name,accountnumber,primarycontactid,createdon&$top=10")}`;
+            $.get(url, (response) => {
+                if (response) {
+
+                    var data = response.deserializedContent.value;
+                    var accounts = [];
+                    $.each(data, (key, value) => {
+                        accounts.push(value);
+                    })
+                    self.ActiveAccounts(accounts);
+                    self.SearchSpinner("");
+                }
+            })
+        }
+        LoadAccounts();
+    }
+
+    $(() => {
+        var model = new AccountsViewModel();
+        ko.applyBindings(model, AccountsView);
+
+    })
+</script>
