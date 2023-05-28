@@ -26,6 +26,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Setup
 
 - The organization instance is referenced via an environment variable (DataverseInstance).
+- Create Elastic Table and SQL Table (Refer ElasticTableEntitySchema & StandardTableEntitySchema) to see the names of fields etc..,
 - Create an application using App Registration.
 - Create an application user (using PPAC) - an S2S user with a security role that can access the entity you want to import.
 - Generate a client secret from Step #2 and store it in the Key Vault.
